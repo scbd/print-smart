@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" ng-controller="PrintSmartCtrl">
 <head>
+	<base href="/printsmart/">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Convention on Biological Diversity</title>
 
-	<link rel="stylesheet" type="text/css" href="/app/libs/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="/app/libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="app/libs/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="app/libs/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="https://raw.githack.com/daneden/animate.css/master/animate.css">
 
 	<style>[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
@@ -44,7 +45,7 @@
 				<table>
 					<tr class="hidden-xs hidden-sm">
 						<td>
-							<img src="/app/images/cbd-leaf-green.svg" style="height:110px;vertical-align:bottom"/>
+							<img src="app/images/cbd-leaf-green.svg" style="height:110px;vertical-align:bottom"/>
 						</td>
 						<td>
 							<h1>SCBD PrintSmart</h1>
@@ -53,7 +54,7 @@
 					</tr>
 					<tr class="visible-sm">
 						<td>
-							<img src="/app/images/cbd-leaf-green.svg" style="height:80px;vertical-align:bottom"/>
+							<img src="app/images/cbd-leaf-green.svg" style="height:80px;vertical-align:bottom"/>
 						</td>
 						<td>
 							<h3>SCBD PrintSmart</h2>
@@ -62,7 +63,7 @@
 					</tr>
 					<tr class="visible-xs">
 						<td>
-							<img src="/app/images/cbd-leaf-green.svg" style="height:50px;vertical-align:bottom"/>
+							<img src="app/images/cbd-leaf-green.svg" style="height:50px;vertical-align:bottom"/>
 						</td>
 						<td>
 							<h4>SCBD PrintSmart</h4>
@@ -103,7 +104,7 @@
 	<ng-view></ng-view>
 
 	<!-- Boot the app -->
-	<script src="/app/libs/requirejs/require.js" data-main="/app/boot.js"></script>
+	<script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
 
 </body>
 </html>

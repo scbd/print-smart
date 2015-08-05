@@ -50,9 +50,9 @@ app.use(function(req, res, next) {
 });
 // Configure static files to serve
 
-app.use('/images/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
+//app.use('/images/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
 //app.use('/app',           express.static(__dirname + '/app-built', { maxAge: 300000 })); //5 minutes
-app.use('/app',           express.static(__dirname + '/app',       { maxAge: 300000 })); //5 minutes
+app.use('/printsmart/app',           express.static(__dirname + '/app',       { maxAge: 300000 })); //5 minutes
 
 // app.get('/doc/no-cache/cop12/insession/restricted.json',  getRestrictedFile);
 // app.get('/doc/no-cache/npmop1/insession/restricted.json', getRestrictedFile);
@@ -61,7 +61,7 @@ app.get('/doc/*',         function(req, res) { res.sendStatus(404); } );
 
 // Configure routes
 
-app.get('/app/*', function(req, res) { res.sendStatus(404); } );
+//app.get('/printsmart/app/*', function(req, res) { res.sendStatus(404); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiBaseUrl, secure: false } ); } );
 
 // Configure template
