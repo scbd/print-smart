@@ -15,7 +15,7 @@ function PrintSmartCtrl($scope, $location, $timeout) {
 
 			var badge = $scope.badge=='boxes' ? "boxes" : (($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID");
 
-			$location.path('/'+escape(badge));
+			$location.path('/badge/'+escape(badge));
 		}
 
 		$scope.badge = "";
