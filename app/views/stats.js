@@ -1,4 +1,4 @@
-define(['underscore'], function(_) {
+define(['lodash'], function(_) {
 	return ["$scope", "$http", "$timeout", "$location", function ($scope, $http, $timeout, $location) {
 
 		$scope.requests = [];
@@ -18,7 +18,7 @@ define(['underscore'], function(_) {
 
 		var qAutoRefresh = null;
 
-		$scope.$on('$routeChangeStart', function(next, current) {
+		$scope.$on('$routeChangeStart', function() {
 			if(!qAutoRefresh)
 				return;
 
@@ -29,9 +29,9 @@ define(['underscore'], function(_) {
 			qAutoRefresh = null;
 		});
 
-		$scope.$watch(function() { return $location.path() }, function(path, oldPath){
+		$scope.$watch(function() { return $location.path(); }, function(path) {
 
-			if(path != "/printsmart/") {
+			if(path != "/") {
 				$scope.badge = "";
 				$scope.$root.contact = null;
 			}
@@ -62,7 +62,7 @@ define(['underscore'], function(_) {
 
 				_.each(downloads, function(d){
 					totalDownloads += d.items.length * (d.downloads||0);
-				})
+				});
 
 				$scope.totalDownloads = totalDownloads;
 			});
@@ -73,7 +73,7 @@ define(['underscore'], function(_) {
 			var requests = $scope.requests;
 
 			requests  = _.filter(requests, function(r) { return r && r.status && r.status[slot]; });
-			requests  = _.last  (requests, last)
+			requests  = _.last  (requests, last);
 
 			return sum(_.map(requests, function(r) {
 				return r.status[slot] - r.status['time-at-creation'];

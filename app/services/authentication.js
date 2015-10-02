@@ -1,6 +1,113 @@
-define(['app'], function (app) { 'use strict';
+define(['app', 'angular'], function (app, ng) { 'use strict';
 
-	app.factory('authentication', ["$http", "$browser", function($http, $browser) {
+	app.factory('apiToken', ["$q", "$rootScope", "$window", "$document", "$timeout", function($q, $rootScope, $window, $document, $timeout) {
+
+		var pToken;
+		//============================================================
+		//
+		//
+		//============================================================
+		function getToken() {
+			//incase of iframe not found in $document object search the $ object (for Firefox)
+			var authenticationFrame = $document.find('#authenticationFrame')[0]||$('#authenticationFrame')[0];
+
+			if(!authenticationFrame) {
+				pToken = pToken || null;
+			}
+
+			if(pToken!==undefined) {
+				return $q.when(pToken || null);
+			}
+
+			pToken = null;
+
+			var defer = $q.defer();
+			var unauthorizedTimeout = $timeout(function(){
+				console.error('accounts.cbd.int is not available / call is made from an unauthorized domain');
+				defer.resolve(null);
+			}, 1000);
+
+			var receiveMessage = function(event)
+			{
+				$timeout.cancel(unauthorizedTimeout);
+
+				if(event.origin!='https://accounts.cbd.int')
+					return;
+
+				var message = JSON.parse(event.data);
+
+				if(message.type=='authenticationToken') {
+					defer.resolve(message.authenticationToken || null);
+
+					if(message.authenticationEmail)
+						$rootScope.lastLoginEmail = message.authenticationEmail;
+				}
+				else {
+					defer.reject('unsupported message type');
+				}
+			};
+
+			$window.addEventListener('message', receiveMessage);
+
+			pToken = defer.promise.then(function(t){
+
+				pToken = t;
+
+				return t;
+
+			}).catch(function(error){
+
+				pToken = null;
+
+				console.error(error);
+
+				throw error;
+
+			}).finally(function(){
+
+				$window.removeEventListener('message', receiveMessage);
+
+			});
+
+			authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), 'https://accounts.cbd.int');
+
+			return pToken;
+		}
+
+		//============================================================
+	    //
+	    //
+	    //============================================================
+		function setToken(token, email) { // remoteUpdate:=true
+
+			pToken = token || undefined;
+
+			var authenticationFrame = $document.find('#authenticationFrame')[0]||$('#authenticationFrame')[0];
+
+			if(authenticationFrame) {
+
+				var msg = {
+					type : "setAuthenticationToken",
+					authenticationToken : token,
+					authenticationEmail : email
+				};
+
+				authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), 'https://accounts.cbd.int');
+			}
+
+			if(email) {
+				$rootScope.lastLoginEmail = email;
+			}
+		}
+
+		return {
+			get : getToken,
+			set : setToken
+		};
+	}]);
+
+
+	app.factory('authentication', ["$http", "$rootScope", "$q", "apiToken", function($http, $rootScope, $q, apiToken) {
 
 		var currentUser = null;
 
@@ -8,19 +115,87 @@ define(['app'], function (app) { 'use strict';
 	    //
 	    //
 	    //============================================================
-		function getUser () {
+		function anonymous() {
+			return { userID: 1, name: 'anonymous', email: 'anonymous@domain', government: null, userGroups: null, isAuthenticated: false, isOffline: true, roles: [] };
+		}
 
-			if(currentUser) return currentUser;
+		//============================================================
+	    //
+	    //
+	    //============================================================
+		function getUser() {
 
-			var headers = { Authorization: "Ticket " + $browser.cookies().authenticationToken };
+			if(currentUser)
+				return $q.when(currentUser);
 
-			currentUser = $http.get('/api/v2013/authentication/user', { headers: headers}).then(function onsuccess (response) {
-				return response.data;
-			}, function onerror () {
-				return { userID: 1, name: 'anonymous', email: 'anonymous@domain', government: null, userGroups: null, isAuthenticated: false, isOffline: true, roles: [] };
+			return $q.when(apiToken.get()).then(function(token) {
+
+				if(!token) {
+					return anonymous();
+				}
+
+				return $http.get('/api/v2013/authentication/user', { headers: { Authorization: "Ticket " + token } }).then(function(r){
+					return r.data;
+				});
+
+			}).catch(function() {
+
+				return anonymous();
+
+			}).then(function(user){
+
+				setUser(user);
+
+				return user;
 			});
+		}
 
-			return currentUser;
+		//==============================
+		//
+		//==============================
+		function LEGACY_user() {
+
+		    console.warn("authentication.user() is DEPRECATED. Use: getUser()");
+
+			return $rootScope.user;
+		}
+
+		//============================================================
+	    //
+	    //
+	    //============================================================
+		function signIn(email, password) {
+
+			return $http.post("/api/v2013/authentication/token", {
+
+				"email": email,
+				"password": password
+
+			}).then(function(res) {
+
+				var token  = res.data;
+
+				return $q.all([token, $http.get('/api/v2013/authentication/user', { headers: { Authorization: "Ticket " + token.authenticationToken } })]);
+
+			}).then(function(res) {
+
+				var token = res[0];
+				var user  = res[1].data;
+
+				email = (email||"").toLowerCase();
+
+				apiToken.set(token.authenticationToken, email);
+				setUser (user);
+
+				$rootScope.$broadcast('signIn', user);
+
+				return user;
+
+			}).catch(function(error) {
+
+				throw { error:error.data, errorCode : error.status };
+
+			});
 		}
 
 		//============================================================
@@ -29,47 +204,64 @@ define(['app'], function (app) { 'use strict';
 	    //============================================================
 		function signOut () {
 
-			document.cookie = "authenticationToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-			reset();
+			apiToken.set(null);
+
+			setUser(null);
+
+			return $q.when(getUser()).then(function(user) {
+
+				$rootScope.$broadcast('signOut', user);
+
+				return user;
+			});
 		}
 
 		//============================================================
 	    //
 	    //
 	    //============================================================
-		function reset () {
+		function setUser(user) {
 
-			currentUser = undefined;
+			currentUser     = user || undefined;
+			$rootScope.user = user || anonymous();
 		}
 
-		return { getUser: getUser, signOut: signOut, reset: reset };
+		return {
+			getUser  : getUser,
+			signIn   : signIn,
+			signOut  : signOut,
+			user     : LEGACY_user,
+		};
 
 	}]);
 
-	app.factory('authHttp', ["$http", "$browser", function($http, $browser) {
+	app.factory('authenticationHttpIntercepter', ["$q", "apiToken", function($q, apiToken) {
 
-		function addAuthentication(config) {
+		return {
+			request: function(config) {
 
-			if(!config)         config         = {};
-			if(!config.headers) config.headers = {};
+				var trusted = /^https:\/\/api.cbd.int\//i.test(config.url) ||
+							  /^\/api\//i                .test(config.url);
 
-			if($browser.cookies().authenticationToken) config.headers.Authorization = "Ticket "+$browser.cookies().authenticationToken;
-			else                                       config.headers.Authorization = undefined;
+				var hasAuthorization = (config.headers||{}).hasOwnProperty('Authorization') ||
+							  		   (config.headers||{}).hasOwnProperty('authorization');
 
-			return config;
-		}
+				if(!trusted || hasAuthorization) // no need to alter config
+					return config;
 
-		function authHttp(config) {
-			return $http(addAuthentication(config));
-		}
+				//Add token to http headers
 
-		authHttp["get"   ] = function(url,       config) { return authHttp(angular.extend(config||{}, { 'method' : "GET"   , 'url' : url })); };
-		authHttp["head"  ] = function(url,       config) { return authHttp(angular.extend(config||{}, { 'method' : "HEAD"  , 'url' : url })); };
-		authHttp["delete"] = function(url,       config) { return authHttp(angular.extend(config||{}, { 'method' : "DELETE", 'url' : url })); };
-		authHttp["jsonp" ] = function(url,       config) { return authHttp(angular.extend(config||{}, { 'method' : "JSONP" , 'url' : url })); };
-		authHttp["post"  ] = function(url, data, config) { return authHttp(angular.extend(config||{}, { 'method' : "POST"  , 'url' : url, 'data' : data })); };
-		authHttp["put"   ] = function(url, data, config) { return authHttp(angular.extend(config||{}, { 'method' : "PUT"   , 'url' : url, 'data' : data })); };
+				return $q.when(apiToken.get()).then(function(token) {
 
-		return authHttp;
+					if(token) {
+						config.headers = ng.extend(config.headers||{}, {
+							Authorization : "Ticket " + token
+						});
+					}
+
+					return config;
+				});
+			}
+		};
 	}]);
 });

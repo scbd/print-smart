@@ -1,4 +1,4 @@
-define(['underscore', 'app'], function(_) {
+define(['lodash', 'app'], function(_) {
 	return ["$scope", "$cookies", "$http", function ($scope, $cookies, $http) {
 
 		$scope.printShopEnabled = !!$cookies.machineAuthorization;

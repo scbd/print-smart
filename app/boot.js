@@ -1,52 +1,47 @@
-fixIEConsole();
-
 window.name = 'NG_DEFER_BOOTSTRAP!';
 
 require.config({
-    waitSeconds: 120,
+    waitSeconds: 30,
     baseUrl : '/printsmart/app/',
     paths: {
-        'angular'         : 'libs/angular/angular.min',
-        'angular-animate' : 'libs/angular-animate/angular-animate.min',
-        'angular-cookies' : 'libs/angular-cookies/angular-cookies.min',
-        'angular-growl'   : 'libs/angular-growl/build/angular-growl.min',
-        'angular-moment'  : 'libs/angular-moment/angular-moment.min',
-        'angular-route'   : 'libs/angular-route/angular-route.min',
-        'async'           : 'libs/requirejs-plugins/src/async',
-        'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
+        'authentication'  : 'services/authentication',
+        'angular'         : 'libs/angular-flex/angular-flex',
+        'ngRoute'         : 'libs/angular-route/angular-route.min',
+        'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
+        'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
         'domReady'        : 'libs/requirejs-domready/domReady',
-        'jquery'          : 'libs/jquery/dist/jquery.min',
-        'moment'          : 'libs/moment/min/moment.min',
         'text'            : 'libs/requirejs-text/text',
-        'underscore'      : 'libs/underscore/underscore'
+        'jquery'          : 'libs/jquery/dist/jquery.min',
+        'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
+        'lodash'          : 'libs/lodash/lodash.min',
+        'angular-growl'   : 'libs/angular-growl/build/angular-growl.min',
+        'moment'          : 'libs/moment/min/moment.min'
     },
     shim: {
-        'angular'         : { 'deps': ['jquery' ], 'exports': 'angular' },
-        'angular-animate' : { 'deps': ['angular'] },
-        'angular-cookies' : { 'deps': ['angular'] },
-        'angular-growl'   : { 'deps': ['angular'] },
-        'angular-moment'  : { 'deps': ['angular', 'moment'] },
-        'angular-route'   : { 'deps': ['angular'] },
-        'bootstrap'       : { 'deps': ['jquery' ] },
-        'moment'          : { 'deps': ['jquery' ] }
+        'libs/angular/angular.min' : { deps : ['jquery'] },
+        'angular'                  : { deps : ['libs/angular/angular.min'] },
+        'ngRoute'                  : { deps : ['angular'] },
+        'ngCookies'                : { deps : ['angular'] },
+        'ngAnimate'                : { deps : ['angular'] },
+        'bootstrap'                : { deps : ['jquery' ] },
+        'angular-growl'            : { deps : ['angular'] },
     },
 });
 
 // BOOT
 
-require(['angular', 'domReady!', 'bootstrap', 'app', 'routes', 'template'], function(ng, doc){
-
+require(['angular', 'domReady!', 'bootstrap', 'app', 'routes', 'template', 'services/machine-authorization-http-intercepter'], function(ng, doc) {
     ng.bootstrap(doc, ['app']);
     ng.resumeBootstrap();
-
 });
 
+// MISC
 
 //==================================================
 // Protect window.console method calls, e.g. console is not defined on IE
 // unless dev tools are open, and IE doesn't define console.debug
 //==================================================
-function fixIEConsole() { 'use strict';
+(function fixIEConsole() { 'use strict';
 
     if (!window.console) {
         window.console = {};
@@ -59,4 +54,4 @@ function fixIEConsole() { 'use strict';
         if (!window.console[methods[i]])
             window.console[methods[i]] = noop;
     }
-}
+})();

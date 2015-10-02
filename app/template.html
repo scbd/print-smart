@@ -35,9 +35,9 @@
 		</style>
 </head>
 <body class="ltr" ng-cloak>
+	<!--<iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>-->
 
 	<div data-growl=""></div>
-	<!--<iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>-->
 
 	<div class="container">
 		<div class="row">
@@ -104,6 +104,7 @@
 	<ng-view></ng-view>
 
 	<!-- Boot the app -->
+	<script>var require = { waitSeconds: 30 }</script>
 	<script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
 
 </body>

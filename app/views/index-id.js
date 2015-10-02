@@ -1,4 +1,5 @@
-define(['underscore', 'angular', 'app', 'bootstrap'], function(_, angular) {
+/* globals escape: false */
+define(['lodash', 'angular', 'app'], function(_, angular) {
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
@@ -169,7 +170,7 @@ define(['underscore', 'angular', 'app', 'bootstrap'], function(_, angular) {
 
 			$q.all(qPromises).then(function(){
 
-				if(errorCount==0)
+				if(!errorCount)
 				{
 					growl.addSuccessMessage(''+requests.length+' document(s) cleared!', {ttl: 2000});
 
@@ -178,15 +179,7 @@ define(['underscore', 'angular', 'app', 'bootstrap'], function(_, angular) {
 				}
 			});
 		}
-
-		//=============================================
-		//
-		//
-		//=============================================
-		function close() {
-			$location.path("/printsmart");
-		}
-
+	
 		//=============================================
 		//
 		//
