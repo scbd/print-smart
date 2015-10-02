@@ -2,16 +2,10 @@
     "name": "printsmart-distribution",
     "description": "Secretariat of the Convention on Biological Diversity",
     "dependencies": {
-        "bower": "1.4.1",
-        "express": "4.12.4",
-        "http-proxy": "1.11.1",
-        "morgan": "1.6.0",
-        "promise": "7.0.3",
-        "q-io": "1.13.1",
-        "serve-static": "1.10.0",
-        "superagent": "1.2.0",
-        "superagent-promise": "1.0.3",
-        "tmp": "0.0.23"
+        "bower": "1.5.3",
+        "express": "4.13.3",
+        "http-proxy": "1.11.2",
+        "morgan": "1.6.1"
     },
     "license": "MIT",
     "private": true,
