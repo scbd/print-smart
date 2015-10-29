@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+
+        <h2>Custom boxes</h2>
+
+        <div class="col-md-12">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="startIndex">Start index</label>
+                    <input id="startIndex" type="number" class="form-control" placeholder="ex: 1000" ng-model="startIndex">
+                </div>
+                <div class="form-group">
+                    <label for="stopIndex">Stop index</label>
+                    <input id="stopIndex" type="number" class="form-control" placeholder="ex: 1999" ng-model="stopIndex">
+                </div>
+                <div class="form-group">
+                    <label for="priority">Priority - <i>0 = high;  100 = medium;   1000 = low; ....</i></label>
+                    <input id="priority" type="number" class="form-control" placeholder="default: 0" ng-model="priority">
+                </div>
+            </form>
+        </div>
+
+        <pre>{{boxes|json}}</pre>
+
+        <h2>Country boxes</h2>
+
+        <table>
+            <tr ng-repeat="c in countries">
+                <td>{{c.code}}</td>
+                <td>-</td>
+                <td>{{c.name}}</td>
+            </tr>
+        </table>
+
+    	<pre>{{countries|json}}</pre>
+
+    </div>
+</div>
