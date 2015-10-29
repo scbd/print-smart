@@ -7,7 +7,7 @@ define(['app', 'providers/extended-route'], function(app) { 'use strict';
 
       $routeProvider
         .when('/',                              {templateUrl: 'views/index.html',         resolveController: true })
-        .when('/management/countries',          {templateUrl: 'views/management/countries.html',     resolveController: true })
+        .when('/management/boxes',              {templateUrl: 'views/management/boxes.html',     resolveController: true })
         .when('/statistics',                    {templateUrl: 'views/stats.html',         resolveController: true })
         .when('/printshop',                     {templateUrl: 'views/printshop.html',     resolveController: true })
         .when('/authorization',                 {templateUrl: 'views/authorization.html', resolveController: true })
