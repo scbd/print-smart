@@ -11,6 +11,6 @@
     "private": true,
     "repository": "scbd/printsmart-distribution",
     "scripts": {
-        "postinstall": "./node_modules/.bin/bower install --allow-root"
+        "postinstall": "./node_modules/.bin/bower install --allow-root -q"
     }
 }
