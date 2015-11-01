@@ -16,7 +16,8 @@
     "font-awesome": "4.4.0",
     "nprogress": "0.2.0",
     "lodash": "3.10.1",
-    "diacritic": "https://github.com/Nijikokun/Diacritics.js.git#0.0.3"
+    "diacritic": "https://github.com/Nijikokun/Diacritics.js.git#0.0.3",
+    "moment": "2.10.6"
   },
   "resolutions": {
     "angular": "1.4.6"
