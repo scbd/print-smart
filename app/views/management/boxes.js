@@ -1,11 +1,11 @@
-define(['lodash', 'angular'], function(_) {
+define(['lodash', 'libs/diacritic/diacritics', 'angular'], function(_, diacritics) {
 	return ["$scope", "$http", function ($scope, $http) {
 
         $http.get("/api/v2015/countries").then(function(res){
 
             $scope.countries = _(res.data).sortBy(function(country){
 
-                return country.name.en.toLowerCase();
+                return diacritics.clean(country.name.en).toLowerCase();
 
             }).map(function(country, index){
                 return {
