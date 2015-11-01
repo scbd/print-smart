@@ -11,7 +11,7 @@ app.use(require('morgan')('dev'));
 
 // Configure routes
 
-app.use('/printsmart/app', express.static(__dirname + '/app', { maxAge: 300000 })); //5 minutes
+app.use('/printsmart/app', express.static(__dirname + '/app'));
 app.all('/api/*',          function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
 app.get('/printsmart*',    function(req, res) { res.sendFile(__dirname + '/app/template.html', {maxAge:300000}); });
 app.all('/*',              function(req, res) { res.status(404).send(); });
