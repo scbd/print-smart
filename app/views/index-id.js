@@ -1,5 +1,5 @@
 /* globals escape: false */
-define(['lodash', 'angular', 'app'], function(_, angular) {
+define(['lodash', 'angular', 'moment', 'app'], function(_, angular, moment) {
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
@@ -17,6 +17,20 @@ define(['lodash', 'angular', 'app'], function(_, angular) {
 		};
 
 		load($route.current.params.badge);
+
+
+        //=============================================
+		//
+		//
+		//=============================================
+        $scope.timeAgo = function(date){
+
+            if(!date)
+                return "";
+
+            return moment(date).fromNow();
+
+        }
 
 		//=============================================
 		//

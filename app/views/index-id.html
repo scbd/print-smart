@@ -42,7 +42,7 @@
 							<td class="text-right">{{$index+1}}.</td>
 							<td>{{request.documentSymbol}}</td>
 							<td class="hidden-xs">{{languages[request.documentLanguage]}}</td>
-							<td class="hidden-xs"><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
+							<td class="hidden-xs">{{timeAgo(fixDate(request.createdOn))}}</td>
 							<td colspan="2">
 								<span ng-switch="request.status['job-state'] || 'pending' ">
 									<span class="label label-default" ng-switch-when="pending">Document is not printed yet!</span>
@@ -51,7 +51,7 @@
 									<span class="label label-warning" ng-switch-when="processing-stopped">Document printing has been stopped ({{request.status['job-id']}})</span>
 									<span class="label label-warning" ng-switch-when="aborted">Document printing has been aborted ({{request.status['job-id']}})</span>
 									<span class="label label-warning" ng-switch-when="canceled">Document printing has been canceled ({{request.status['job-id']}})</span>
-									<span                             ng-switch-when="completed"><span am-time-ago="{{fixDate(request.printedOn)}}"></span></span>
+									<span                             ng-switch-when="completed">{{timeAgo(fixDate(request.printedOn))}}</span>
 									<span class="label label-danger"  ng-switch-default>Unknown error: {{request.status['job-state']}} (({{request.status['job-id']}}))</span>
 								</span>
 							</td>
