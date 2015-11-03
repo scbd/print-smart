@@ -1,6 +1,4 @@
-/* jshint node: true, browser: false */
-'use strict';
-
+'use strict'; // jshint node: true, browser: false, esnext: true
 var proxy   = require('http-proxy').createProxyServer({});
 var express = require('express');
 var app     = express();
@@ -27,3 +25,5 @@ proxy.on('error', function (e) {
 app.listen(process.env.PORT || 2000, '0.0.0.0', function () {
 	console.log('Server listening on %j', this.address());
 });
+
+process.on('SIGTERM', ()=>process.exit());
