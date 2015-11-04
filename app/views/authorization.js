@@ -11,10 +11,10 @@ define(['app', 'ngCookies'], function() {
 
 				expiration.setMonth(expiration.getMonth()+2);
 
-				$cookies.put('machineAuthorization', $scope.authorizationKey, { path : 'printsmart', expires : expiration });
+				$cookies.put('machineAuthorization', $scope.authorizationKey, { path : '/printsmart', expires : expiration });
 			}
 			else {
-				$cookies.remove('machineAuthorization', $scope.authorizationKey, { path : 'printsmart' });
+				$cookies.remove('machineAuthorization', $scope.authorizationKey, { path : '/printsmart' });
 			}
 
 			$scope.authorizationKey = '';
