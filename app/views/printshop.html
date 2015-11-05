@@ -10,11 +10,11 @@
 
 			<input class="form-control input-lg" type="text" maxlength="9" style="width:250px;display:inline-block" ng-model="badgeCode" id="badge" placeholder="Scan badge number">
 
-			<button type="button" ng-click="printAll()" ng-disabled="cleanBadge().length<8 ||	 !readyDocuments().length" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Print all</button>
+			<button type="button" ng-click="printAll()" ng-disabled="cleanBadge().length<8 || !readyDocuments().length" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Print all</button>
 
 		</div>
 
-		<h1>SCBD Print Shop!</h1>
+		<h1>Print Shop</h1>
 
 		<div ng-show="error" class="alert alert-danger">
 			{{error}}
@@ -30,13 +30,13 @@
 				</tr>
 			</thead>
 
-			<tr ng-repeat="d in documents" ng-class="{ success : d.printed, warning : !isReady(d), danger : d.error }">
+			<tr ng-repeat="d in documents" ng-class="{ success : d.printed, info: isReady(d),  warning : !isReady(d) && !d.printed, danger : d.error }">
 				<td>
 					<input ng-hide="d.printed" type="url" style="width:100%" ng-model="d.url">
 					<span  ng-show="d.printed">{{d.url}}</span>
 				</td>
 				<td style="text-align:right">
-					<input ng-disabled="d.printed" style="width:90px;text-align:right" type="number" ng-model="d.copies">
+					<input style="width:90px;text-align:right" type="number" ng-model="d.copies">
 				</td>
 			</tr>
 

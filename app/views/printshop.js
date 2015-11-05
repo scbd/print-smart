@@ -1,11 +1,17 @@
 define(['lodash', 'app'], function(_) {
 	return ["$scope", "$cookies", "$http", function ($scope, $cookies, $http) {
 
-		$scope.printShopEnabled = !!$cookies.machineAuthorization;
+		$scope.printShopEnabled = !!$cookies.get("machineAuthorization");
 
-		$scope.badgeCode = ($scope.$root.printShop||{}).badge    ||"";
-		$scope.documents = ($scope.$root.printShop||{}).documents||[ { url : "", copies : 0 }];
-		$scope.$root.printShop = undefined;
+        if(!$scope.printShopEnabled)
+            return;
+
+        var printShop = JSON.parse(localStorage.printShop||"{}");
+
+        localStorage.removeItem("printShop");
+
+		$scope.badgeCode = printShop.badge || "";
+		$scope.documents = printShop.documents||[ { url : "", copies : 0 }];
 
 		_.each($scope.documents, function(d) { d.copies = 0; });
 
@@ -56,12 +62,12 @@ define(['lodash', 'app'], function(_) {
 		//============================================================
 		$scope.printAll = function(){
 
+            delete $scope.error;
+
 			// Prepare data
 
 			var badge = $scope.cleanBadge();
-			var documents = _.filter($scope.readyDocuments(), function(d) {
-				return !d.printed;
-			});
+			var documents = $scope.readyDocuments();
 
 			if(!documents.length) {
 				alert("Nothing to print!");
@@ -95,17 +101,18 @@ define(['lodash', 'app'], function(_) {
 
 				_.each(documents, function(d){
 					d.printed = true;
+                    d.copies = 0;
 				});
 
 			}).catch(function(res){
 
 				$scope.loading = false;
 
-				     if(res.status==400) $scope.error = { error: "BAD_REQUEST" };
-				else if(res.status==403) $scope.error = { error: "NOT_AUTHORIZED" };
-				else if(res.status==404) $scope.error = { error: "NO_SERVICE" };
+				     if(res.status==400) $scope.error = res.data || { error: "BAD_REQUEST" };
+				else if(res.status==403) $scope.error = res.data || { error: "NOT_AUTHORIZED" };
+				else if(res.status==404) $scope.error = res.data || { error: "NO_SERVICE" };
 				else if(res.status==500) $scope.error = { error: "NO_SERVICE" };
-				else                     $scope.error = { error: "UNKNOWN",    message : "Unknown error" };
+				else                     $scope.error = { error: "UNKNOWN",    data : res.data };
 			});
 		};
 
