@@ -14,16 +14,17 @@ app.all('/api/*',          function(req, res) { proxy.web(req, res, { target: 'h
 app.get('/printsmart*',    function(req, res) { res.sendFile(__dirname + '/app/template.html', {maxAge:300000}); });
 app.all('/*',              function(req, res) { res.status(404).send(); });
 
-// LOG PROXY ERROR & RETURN http:500
-
-proxy.on('error', function (e) {
-    console.error('proxy error:', e);
-});
-
 // START HTTP SERVER
 
 app.listen(process.env.PORT || 2000, '0.0.0.0', function () {
 	console.log('Server listening on %j', this.address());
+});
+
+// Handle proxy errors ignore
+
+proxy.on('error', function (e,req, res) {
+    console.error('proxy error:', e);
+    res.status(502).send();
 });
 
 process.on('SIGTERM', ()=>process.exit());
