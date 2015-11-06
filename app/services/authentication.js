@@ -238,19 +238,24 @@ define(['app', 'angular'], function (app, ng) { 'use strict';
 	app.factory('authenticationHttpIntercepter', ["$q", "apiToken", function($q, apiToken) {
 
 		return {
+
 			request: function(config) {
 
-				var trusted = /^https:\/\/api.cbd.int\//i.test(config.url) ||
-							  /^\/api\//i                .test(config.url);
+				var trusted =
+								/^https:\/\/api.cbd.int\//i .test(config.url) ||
+								/^https:\/\/localhost[:\/]/i.test(config.url) ||
+								/^https:\/\/api.cbd.int\//i .test(config.url) ||
+								/^\/\w+/i                 	.test(config.url) ||
+							  /^\/api\//i                 .test(config.url);
 
 				var hasAuthorization = (config.headers||{}).hasOwnProperty('Authorization') ||
 							  		   (config.headers||{}).hasOwnProperty('authorization');
+
 
 				if(!trusted || hasAuthorization) // no need to alter config
 					return config;
 
 				//Add token to http headers
-
 				return $q.when(apiToken.get()).then(function(token) {
 
 					if(token) {
@@ -258,7 +263,6 @@ define(['app', 'angular'], function (app, ng) { 'use strict';
 							Authorization : "Ticket " + token
 						});
 					}
-
 					return config;
 				});
 			}

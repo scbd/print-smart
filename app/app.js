@@ -9,6 +9,7 @@ define(['angular', 'angular-growl'], function(angular) { 'use strict';
     app.config(['$httpProvider', 'growlProvider', function($httpProvider, growlProvider) {
 
         $httpProvider.useApplyAsync(true);
+        $httpProvider.interceptors.push('authenticationHttpIntercepter');
         $httpProvider.interceptors.push('machineAuthorizationHttpIntercepter');
 
         growlProvider.globalTimeToLive(5000);

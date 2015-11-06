@@ -16,7 +16,7 @@ app.all('/*',              function(req, res) { res.status(404).send(); });
 
 // START HTTP SERVER
 
-app.listen(process.env.PORT || 2000, '0.0.0.0', function () {
+app.listen(process.env.PORT || 4000, '0.0.0.0', function () {
 	console.log('Server listening on %j', this.address());
 });
 
