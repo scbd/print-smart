@@ -18,7 +18,7 @@
 
 					<button class="hidden-xs btn btn-primary pull-right" ng-disabled="(box.requests|filter:toCommit).length==0" ng-click="commit((box.requests|filter:toCommit), boxes.length==1)">Clear {{(box.requests|filter:toCommit).length}} document(s) »</button>
 					<button class="visible-xs btn btn-primary btn-xs pull-right" ng-disabled="(box.requests|filter:toCommit).length==0" ng-click="commit((box.requests|filter:toCommit), boxes.length==1)">Clear {{(box.requests|filter:toCommit).length}} document(s) »</button>
-					<h3 class="hidden-xs">{{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}</h3>
+					<h3 class="hidden-xs">{{box.box}} - {{box.participantInitials}} | {{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}</h3>
 					<h5 class="visible-xs">{{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}</h5>
 
 					<table width="100%" style="margin:20px 10px" class="table">

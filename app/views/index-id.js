@@ -18,7 +18,6 @@ define(['lodash', 'angular', 'moment', 'app'], function(_, angular, moment) {
 
 		load($route.current.params.badge);
 
-
         //=============================================
 		//
 		//
@@ -94,7 +93,8 @@ define(['lodash', 'angular', 'moment', 'app'], function(_, angular, moment) {
 					return {
 						box : _.first(requests).box,
 						participant : _.first(requests).participant,
-						participantName : _.first(requests).participantName,
+                        participantName : _.first(requests).participantName,
+						participantInitials : initials(_.first(requests).participantName),
 						requests : requests
 					};
 				});
@@ -137,11 +137,21 @@ define(['lodash', 'angular', 'moment', 'app'], function(_, angular, moment) {
 		//
 		//
 		//=============================================
+		function initials(name) {
+            return _.map((name||"").toUpperCase().split(' '), function(n){
+                return n[0];
+            }).join('');
+		}
+
+		//=============================================
+		//
+		//
+		//=============================================
 		function flag(request, value) {
 			request.completed = (!!value || !!request.deliveredOn);
 		}
 
-		//=============================================
+        //=============================================
 		//
 		//
 		//=============================================
@@ -193,7 +203,7 @@ define(['lodash', 'angular', 'moment', 'app'], function(_, angular, moment) {
 				}
 			});
 		}
-	
+
 		//=============================================
 		//
 		//
