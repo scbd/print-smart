@@ -23,7 +23,9 @@
 
 					<table width="100%" style="margin:20px 10px" class="table">
 						<tr>
-							<th style="vertical-align:middle;width:26px"></th>
+							<th style="vertical-align:middle;width:26px">
+                                <checkbox style="font-size:24px;color:inherit" ng-model="box.allSelected" ng-change="selectAll(box)"></checkbox>
+                            </th>
 							<th style="vertical-align:middle;width:26px">#</th>
 							<th style="vertical-align:middle">Document</th>
 							<th style="vertical-align:middle" class="hidden-xs">Language</th>
@@ -36,8 +38,7 @@
 						<tr ng-repeat="request in box.requests|orderBy:'documentSymbol'" ng-class="{ info: request.completed && !request.deliveredOn, delivered : request.deliveredOn, danger : (request.status['job-state']=='aborted' || request.status['job-state']=='canceled'), warning : (request.status['job-state']=='pending-held'||request.status['job-state']=='processing-stopped'), }" style="height:40px">
 							<td class="text-left">
 								<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
-								<i ng-show="request.deliveredOn" style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i>
-								<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i></a>
+                                <checkbox style="font-size:24px;text-decoration:inherit" ng-model="request.completed" ng-disabled="request.deliveredOn" ng-hide="request.loading"></checkbox>
 							</td>
 							<td class="text-right">{{$index+1}}.</td>
 							<td>{{request.documentSymbol}}</td>

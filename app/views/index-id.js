@@ -1,5 +1,5 @@
 /* globals escape: false */
-define(['lodash', 'angular', 'moment', 'app'], function(_, angular, moment) {
+define(['lodash', 'angular', 'moment', 'app', 'directives/checkbox'], function(_, angular, moment) {
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
@@ -120,7 +120,11 @@ define(['lodash', 'angular', 'moment', 'app'], function(_, angular, moment) {
 			});
 		}
 
-
+        $scope.selectAll = function(box) {
+            box.requests.forEach(function(r){
+                $scope.flag(r, box.allSelected);
+            });
+        };
 
 		//=============================================
 		//
