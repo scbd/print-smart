@@ -5,7 +5,6 @@ define(['lodash','authentication'], function(_) {
 		$scope.refresh  = refresh;
 		$scope.sum      = sum;
 		$scope.distinct = distinct;
-		$scope.averageJobTime   = averageJobTime;
 		$scope.getFromLast      = getFromLast;
 		$scope.isPending        = function(r) { return  is(r, 'pending' ); };
 		$scope.isPendingHeld    = function(r) { return  is(r, 'pending-held' ); };
@@ -68,17 +67,20 @@ define(['lodash','authentication'], function(_) {
 			});
 		}
 
-		function averageJobTime(slot, last) {
+		$scope.averageJobTime = function(slot, last) {
 
 			var requests = $scope.requests;
 
 			requests  = _.filter(requests, function(r) { return r && r.status && r.status[slot]; });
-			requests  = _.last  (requests, last);
+			requests  = requests.splice  (requests.length-11, last);
 
 			return sum(_.map(requests, function(r) {
-				return r.status[slot] - r.status['time-at-creation'];
+				if(r && r.status)
+					return r.status[slot] - r.status['time-at-creation'];
+				else
+					return requests.length;
 			})) / requests.length;
-		}
+		};
 
 		function is(request, status) {
 
