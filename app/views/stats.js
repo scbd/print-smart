@@ -75,10 +75,7 @@ define(['lodash','authentication'], function(_) {
 			requests  = requests.splice  (requests.length-11, last);
 
 			return sum(_.map(requests, function(r) {
-				if(r && r.status)
 					return r.status[slot] - r.status['time-at-creation'];
-				else
-					return requests.length;
 			})) / requests.length;
 		};
 
