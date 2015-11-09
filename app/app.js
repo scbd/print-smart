@@ -1,4 +1,4 @@
-define(['angular', 'angular-growl'], function(angular) { 'use strict';
+define(['angular', 'require', 'angular-growl'], function(angular, require) { 'use strict';
 
     var deps = ['ngRoute', 'ngCookies', 'angular-growl'];
 
@@ -39,6 +39,8 @@ define(['angular', 'angular-growl'], function(angular) { 'use strict';
 			}
 		};
 	}]);
+
+    require(['authentication']);//Ensure authentication exists
 
 
     return app;
