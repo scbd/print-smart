@@ -12,9 +12,11 @@ define(['app','lodash', 'providers/extended-route','authentication'], function(a
         .when('/printshop',                     {templateUrl: 'views/printshop.html',     resolveController: true })
         .when('/authorization',                 {templateUrl: 'views/authorization.html', resolveController: true })
         .when('/badge/:badge',                  {templateUrl: 'views/index-id.html',      resolveController: true })
-        .when('/404',                           {templateUrl: 'views/404.html',           })
-        .otherwise({redirectTo: '/404'});
 
+        .when('/not-found', {templateUrl: 'views/404.html'}).when('/404', {redirectTo: '/not-found'})
+        .when('/forbidden', {templateUrl: 'views/403.html'}).when('/403', {redirectTo: '/forbidden'})
+        .otherwise({redirectTo: '/not-found'});
+  }]);
 
   //============================================================
   //
