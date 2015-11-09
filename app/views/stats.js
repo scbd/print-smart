@@ -1,5 +1,5 @@
 define(['lodash','authentication'], function(_) {
-	return ["$scope", "$http", "$timeout", "$location","authentication", function ($scope, $http, $timeout, $location,$auth) {
+	return ['$scope', '$http', '$timeout', '$location', function ($scope, $http, $timeout, $location) {
 
 		$scope.requests = [];
 		$scope.refresh  = refresh;
