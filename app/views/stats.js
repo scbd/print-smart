@@ -1,5 +1,5 @@
 define(['lodash','authentication'], function(_) {
-	return ['$scope', '$http', '$timeout', '$location', function ($scope, $http, $timeout, $location) {
+	return ['$scope', '$http', '$timeout', '$location', '$q', function ($scope, $http, $timeout, $location, $q) {
 
 		$scope.requests = [];
 		$scope.refresh  = refresh;
@@ -49,13 +49,35 @@ define(['lodash','authentication'], function(_) {
 
 		function refresh() {
 
-			$http.get("/api/v2014/printsmart-requests", { params : { badge : $location.search().badge } }).success(function(requests){
-				console.log('Requests loaded');
-				$scope.requests = requests;
-			});
+            $scope.loading = {
+                downloads : true,
+                prints : true
+            }
 
-			$http.get("/api/v2014/printsmart-downloads", { params : { badge : $location.search().badge } }).success(function(downloads){
-				console.log('Downloads loaded');
+            var r1, r2;
+
+			r1 = $http.get("/api/v2014/printsmart-requests", { params : { badge : $location.search().badge } }).then(function(res){
+
+				$scope.requests = res.data;
+
+			}).catch(function(err) {
+
+                if(err.status==403){
+                    $location.url('/403');
+                    return;
+                }
+
+                console.error(err.data||err);
+
+            }).finally(function(){
+
+                delete $scope.loading.prints;
+
+            })
+
+			r2 = $http.get("/api/v2014/printsmart-downloads", { params : { badge : $location.search().badge } }).then(function(res){
+
+                var downloads = res.data;
 
 				var totalDownloads = 0;
 
@@ -64,7 +86,26 @@ define(['lodash','authentication'], function(_) {
 				});
 
 				$scope.totalDownloads = totalDownloads;
-			});
+
+            }).catch(function(err) {
+
+                if(err.status==403){
+                    $location.url('/403');
+                    return;
+                }
+
+                console.error(err.data||err);
+
+            }).finally(function(){
+
+                delete $scope.loading.downloads;
+
+            })
+
+            $q.all([r1, r2]).finally(function(){
+
+                delete $scope.loading;
+            })
 		}
 
 		$scope.averageJobTime = function(slot, last) {

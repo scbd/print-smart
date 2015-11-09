@@ -2,14 +2,17 @@
 	<div class="row">
 
 	<div class="text-right" style="margin-bottom:10px">
-		<button class="btn btn-default btn-lg" ng-click="refresh()">Refresh</button>
+		<button class="btn btn-default btn-lg" ng-click="refresh()">
+            <i class="fa fa-spin fa-cog" ng-show="loading"></i>
+            Refresh
+        </button>
 	</div>
 
 	<table class="table table-striped table-hover">
 
 
 		<tr class="info">
-			<th colspan="3">Downloads</td>
+			<th colspan="3">Downloads <i class="fa fa-spin fa-cog" ng-show="loading.downloads"></i></td>
 		</tr>
 		<tr>
 			<td><b>Number of documents</b></td>
@@ -19,7 +22,7 @@
 
 
 		<tr class="info">
-			<th colspan="3">Prints</td>
+			<th colspan="3">Prints <i class="fa fa-spin fa-cog" ng-show="loading.prints"></i></td>
 		</tr>
 		<tr>
 			<td><b>Number of documents</b></td>
