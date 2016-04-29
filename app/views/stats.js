@@ -169,7 +169,7 @@ define(['lodash','authentication'], function(_) {
 			else if(member1)
 				values = _.union(values, distinct(value[member1], member2, member3, member4, member5));
 			else
-				values = _.union(values, value);
+				values = _.union(values, [value]);
 
 			return _.uniq(values);
 		}
