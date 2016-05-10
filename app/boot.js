@@ -1,5 +1,3 @@
-window.name = 'NG_DEFER_BOOTSTRAP!';
-
 require.config({
     waitSeconds: 30,
     baseUrl : '/printsmart/app/',
@@ -30,9 +28,10 @@ require.config({
 
 // BOOT
 
-require(['angular', 'domReady!', 'bootstrap', 'app', 'routes', 'template', 'services/machine-authorization-http-intercepter'], function(ng, doc) {
-    ng.bootstrap(doc, ['app']);
-    ng.resumeBootstrap();
+require(['angular', 'app', 'bootstrap', 'routes', 'template', 'services/machine-authorization-http-intercepter'], function(ng, app) {
+    ng.element(document).ready(function(){
+        ng.bootstrap(document, [app.name]);
+    });
 });
 
 // MISC
