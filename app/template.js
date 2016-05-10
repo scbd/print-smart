@@ -1,5 +1,5 @@
 /* globals escape: false */
-define(['app'], function(app) {
+define(['app', 'keymaster'], function(app, key) {
 
 	app.controller("PrintSmartCtrl", ["$scope", "$location", "$timeout", "$document", function ($scope, $location, $timeout, $document) {
 
@@ -10,6 +10,8 @@ define(['app'], function(app) {
 				$scope.$root.contact = null;
 			}
 		});
+
+        key('esc', close);
 
 	    $scope.submit = function () {
 
@@ -23,11 +25,7 @@ define(['app'], function(app) {
 			$scope.badge = "";
 	    };
 
-		$scope.close = function() {
-			$location.hash('');
-			$location.search({});
-			$location.path("/");
-		};
+		$scope.close = close;
 
 		$scope.isHome = function () {
 			return $location.path() == "/";
@@ -46,5 +44,10 @@ define(['app'], function(app) {
 
 		if(!$scope.$root.keepBadgeFocusPromise)
 			keepBadgeFocus();
+
+        function close() {
+            $location.url("/");
+        };
+
 	}]);
 });

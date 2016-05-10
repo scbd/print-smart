@@ -13,6 +13,7 @@ require.config({
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
         'lodash'          : 'libs/lodash/lodash.min',
         'angular-growl'   : 'libs/angular-growl/build/angular-growl.min',
+        'keymaster'       : 'libs/keymaster/keymaster',
         'moment'          : 'libs/moment/min/moment.min'
     },
     shim: {
@@ -23,6 +24,7 @@ require.config({
         'ngAnimate'                : { deps : ['angular'] },
         'bootstrap'                : { deps : ['jquery' ] },
         'angular-growl'            : { deps : ['angular'] },
+        'keymaster'                : { deps : ['jquery'], exports : 'key', init: function() { return this.key.noConflict(); } },
     },
 });
 

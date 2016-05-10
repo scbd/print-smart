@@ -1,5 +1,5 @@
 /* globals escape: false */
-define(['lodash', 'angular', 'moment', 'app', 'directives/checkbox'], function(_, angular, moment) {
+define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'], function(_, angular, moment, key) {
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
@@ -15,6 +15,18 @@ define(['lodash', 'angular', 'moment', 'app', 'directives/checkbox'], function(_
 			"ru" : "Русский / Russian" ,
 			"zh" : "中文 / Chinese"
 		};
+
+        key('ctrl+esc', function(){
+            var requests = _.filter($scope.allRequests, toCommit);
+
+            if(requests.length) commit(requests, true);
+            else                close();
+        });
+
+
+        $scope.$on('$destroy', function(){
+            key.unbind('ctrl+esc');
+        });
 
 		load($route.current.params.badge);
 
@@ -226,6 +238,14 @@ define(['lodash', 'angular', 'moment', 'app', 'directives/checkbox'], function(_
 
 		//=============================================
 		//
+		//
+		//=============================================
+        function close() {
+            $location.url("/");
+        }
+
+		//=============================================
+		//
 		// ERRORS
 		//
 		//=============================================
@@ -245,6 +265,5 @@ define(['lodash', 'angular', 'moment', 'app', 'directives/checkbox'], function(_
 				  !$scope.isNotAuthorized() &&
 				  !$scope.isBadgeInvalid();
 		};
-
 	}];
 });
