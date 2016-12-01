@@ -39,7 +39,7 @@
                                 <checkbox style="font-size:24px;text-decoration:inherit" ng-model="request.completed" ng-disabled="request.deliveredOn" ng-hide="request.loading"></checkbox>
 							</td>
 							<td class="text-right">{{$index+1}}.</td>
-							<td>{{request.documentSymbol}}</td>
+							<td>{{displayText(request)||request.documentSymbol}}</td>
 							<td class="hidden-xs">{{languages[request.documentLanguage]}}</td>
 							<td class="hidden-xs">{{timeAgo(fixDate(request.createdOn))}}</td>
 							<td colspan="2">

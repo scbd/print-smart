@@ -41,7 +41,7 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 
             return moment(date).fromNow();
 
-        }
+        };
 
 		//=============================================
 		//
@@ -235,6 +235,14 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 		$scope.fixDate = function (dt) {
 			return dt ? new Date(dt) : dt;
 		};
+
+		//=============================================
+		//
+		//
+		//=============================================
+        $scope.displayText = function(d) {
+            return /^[A-Z0-9]{24}$/i.test(d.documentSymbol) ? d.documentTitle : d.documentSymbol;
+        };
 
 		//=============================================
 		//
