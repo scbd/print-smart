@@ -1,5 +1,5 @@
 #!/bin/sh
 
-docker build -t localhost:5000/printsmart-distribution git@github.com:scbd/printsmart-distribution.git
+docker build -t scbd/printsmart-distribution git@github.com:scbd/printsmart-distribution.git
 
-docker push localhost:5000/printsmart-distribution
+docker push scbd/printsmart-distribution
