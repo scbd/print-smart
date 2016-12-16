@@ -14,6 +14,7 @@ define(['lodash','authentication'], function(_) {
 		$scope.isCanceled       = function(r) { return  is(r, 'canceled' ); };
 		$scope.isAborted        = function(r) { return  is(r, 'aborted' ); };
 		$scope.isCleared        = function(r) { return  is(r, 'cleared' ); };
+		$scope.isDay            = function(d, upto) { return function(r) { return r.createdOn.indexOf(d)===0 || (upto && r.createdOn.substr(0,10)<d) } };
 
 		var qAutoRefresh = null;
 
@@ -73,7 +74,7 @@ define(['lodash','authentication'], function(_) {
 
                 delete $scope.loading.prints;
 
-            })
+            });
 
 			r2 = $http.get("/api/v2014/printsmart-downloads", { params : { badge : $location.search().badge } }).then(function(res){
 
@@ -100,12 +101,20 @@ define(['lodash','authentication'], function(_) {
 
                 delete $scope.loading.downloads;
 
-            })
+            });
 
             $q.all([r1, r2]).finally(function(){
 
                 delete $scope.loading;
-            })
+
+            }).then(function(){
+
+                $scope.days = _($scope.requests).map(function(r){
+
+                    return r.createdOn.substr(0,10);
+
+                }).uniq().sortBy().value();
+            });
 		}
 
 		$scope.averageJobTime = function(slot, last) {
