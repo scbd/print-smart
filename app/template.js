@@ -1,7 +1,9 @@
 /* globals escape: false */
-define(['app', 'keymaster'], function(app, key) {
+define(['app', 'keymaster', 'ngCookies'], function(app, key) {
 
-	app.controller("PrintSmartCtrl", ["$scope", "$location", "$timeout", "$document", function ($scope, $location, $timeout, $document) {
+	app.controller("PrintSmartCtrl", ["$scope", "$location", "$timeout", "$document", "$cookies", function ($scope, $location, $timeout, $document, $cookies) {
+
+		$scope.location = Captialize($cookies.get('location'));
 
 		$scope.$watch(function() { return $location.path(); }, function(path){
 
@@ -50,4 +52,13 @@ define(['app', 'keymaster'], function(app, key) {
         };
 
 	}]);
+
+	function Captialize(text) {
+
+		if(text) {
+			text = text.replace(/\b\w/g, function(l){ return l.toUpperCase() });
+		}
+
+		return text;
+	}
 });

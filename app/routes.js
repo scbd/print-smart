@@ -11,6 +11,7 @@ define(['app','lodash', 'providers/extended-route','authentication'], function(a
         .when('/statistics',                    {templateUrl: 'views/stats.html',         resolveController: true, resolve : { user : securize(["Administrator"]) } })
         .when('/printshop',                     {templateUrl: 'views/printshop.html',     resolveController: true })
         .when('/authorization',                 {templateUrl: 'views/authorization.html', resolveController: true })
+        .when('/authorize',                     {redirectTo:  '/authorization' })
         .when('/badge/:badge',                  {templateUrl: 'views/index-id.html',      resolveController: true })
 
         .when('/not-found', {templateUrl: 'views/404.html'}).when('/404', {redirectTo: '/not-found'})

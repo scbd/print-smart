@@ -32,6 +32,20 @@
 		.buttons {
 		    margin: 220px 4px;
 		}
+
+		.leaf { vertical-align:bottom }
+
+		@media (max-width: 767px) {
+			.leaf { height:50px; }
+		}
+
+		@media (min-width: 768px) and (max-width: 991px) {
+			.leaf { height:80px; }
+		}
+		
+		@media (min-width: 992px) {
+			.leaf { height:110px; }
+		}
 		</style>
 </head>
 <body class="ltr" ng-cloak>
@@ -42,33 +56,17 @@
 		<div class="row">
 			<div class="col-sm-5 col-xs-8">
 				<table>
-					<tr class="hidden-xs hidden-sm">
+					<tr>
 						<td>
-							<img src="app/images/cbd-leaf-green.svg" style="height:110px;vertical-align:bottom"/>
+							<img src="app/images/cbd-leaf-green.svg" class="leaf"/>
 						</td>
 						<td>
-							<h1>SCBD PrintSmart</h1>
-							<h3>Document distribution</h3>
-						</td>
-					</tr>
-					<tr class="visible-sm">
-						<td>
-							<img src="app/images/cbd-leaf-green.svg" style="height:80px;vertical-align:bottom"/>
-						</td>
-						<td>
-							<h3>SCBD PrintSmart</h2>
-							<h4>Document distribution</h4>
+							<h1>SCBD PrintSmart 
+								<small ng-if="::location"><br/><span class="label label-default">{{::location}}</span></small>
+							</h1>
 						</td>
 					</tr>
-					<tr class="visible-xs">
-						<td>
-							<img src="app/images/cbd-leaf-green.svg" style="height:50px;vertical-align:bottom"/>
-						</td>
-						<td>
-							<h4>SCBD PrintSmart</h4>
-							<h5>Document distribution</h5>
-						</td>
-					</tr>
+					
 				</table>
 			</div>
 
