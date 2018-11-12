@@ -18,29 +18,6 @@ define(['angular', 'require', 'angular-growl'], function(angular, require) { 'us
 
     }]);
 
-    app.factory('machineAuthorizationHttpIntercepter', ["$q", "apiToken", "$cookies", function($q, apiToken, $cookies) {
-
-		return {
-			request: function(config) {
-
-				var trusted = /^\/api\/\/v2014\/printsmart-requests/i.test(config.url) ||
-                              /^\/api\/\/v2014\/kronos/i             .test(config.url);
-
-				var hasAuthorization = (config.headers||{}).hasOwnProperty('machineAuthorization');
-
-				if(!trusted || hasAuthorization) // no need to alter config
-					return config;
-
-				//Add token to http headers
-
-                if($cookies.get("machineAuthorization")) {
-                    config.headers = config.headers || {};
-                    config.headers.machineAuthorization = $cookies.get("machineAuthorization");
-                }
-			}
-		};
-	}]);
-
 	app.factory('apiRebase', ["$location", function($location) {
 
 		return {

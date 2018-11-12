@@ -3,8 +3,12 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
+		var location = $route.current.params.location;
+
+		$scope.location  = location;
 		$scope.toCommit  = toCommit;
 		$scope.commit    = commit;
+		$scope.captialize= captialize;
 		$scope.flag      = flag;
 		$scope.badge     = null;
 		$scope.languages = {
@@ -58,7 +62,15 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 
 			if(badge=="boxes") {
 
-				qRequests = $http.get('/api/v2014/printsmart-requests', { params : { q : { completed:false } } });
+				var q = { 
+					completed: false,
+					location: location
+				};
+
+				if(q.location) 
+					delete q.location;
+
+				qRequests = $http.get('/api/v2014/printsmart-requests', { params : { q : q } });
 			}
 			else {
 
@@ -249,7 +261,7 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 		//
 		//=============================================
         function close() {
-            $location.url("/");
+            $location.url("/"+encodeURIComponent(location||''));
         }
 
 		//=============================================
@@ -273,5 +285,14 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 				  !$scope.isNotAuthorized() &&
 				  !$scope.isBadgeInvalid();
 		};
+
+		function captialize(text) {
+
+			if(text) {
+				text = text.replace(/\b\w/g, function(l){ return l.toUpperCase() });
+			}
+	
+			return text;
+		}		
 	}];
 });

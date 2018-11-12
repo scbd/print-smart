@@ -6,16 +6,22 @@ define(['app','lodash', 'providers/extended-route','authentication'], function(a
       $locationProvider.hashPrefix('!');
 
       $routeProvider
-        .when('/',                              {templateUrl: 'views/index.html',         resolveController: true })
-        .when('/management/boxes',              {templateUrl: 'views/management/boxes.html',     resolveController: true })
-        .when('/statistics',                    {templateUrl: 'views/stats.html',         resolveController: true, resolve : { user : securize(["Administrator"]) } })
-        .when('/printshop',                     {templateUrl: 'views/printshop.html',     resolveController: true })
-        .when('/authorization',                 {templateUrl: 'views/authorization.html', resolveController: true })
-        .when('/authorize',                     {redirectTo:  '/authorization' })
-        .when('/badge/:badge',                  {templateUrl: 'views/index-id.html',      resolveController: true })
+        .when('/',                  {templateUrl: 'views/index.html',         resolveController: true })
+        .when('/management/boxes',  {templateUrl: 'views/management/boxes.html',     resolveController: true })
+        .when('/statistics',        {templateUrl: 'views/stats.html',         resolveController: true, resolve : { user : securize(["Administrator"]) } })
+        .when('/printshop',         {templateUrl: 'views/printshop.html',     resolveController: true })
+        .when('/authorization',     {templateUrl: 'views/authorization.html', resolveController: true })
+        .when('/authorize',         {redirectTo:  '/authorization' })
+        .when('/badge/:badge',      {templateUrl: 'views/index-id.html',      resolveController: true })
 
         .when('/not-found', {templateUrl: 'views/404.html'}).when('/404', {redirectTo: '/not-found'})
         .when('/forbidden', {templateUrl: 'views/403.html'}).when('/403', {redirectTo: '/forbidden'})
+
+        .when('/:location',                  {templateUrl: 'views/index.html',                resolveController: true, canScan:true })
+        .when('/:location/badge/:badge',     {templateUrl: 'views/index-id.html',             resolveController: true })
+        .when('/:location/management/boxes', {templateUrl: 'views/management/boxes.html',     resolveController: true })        
+
+
         .otherwise({redirectTo: '/not-found'});
   }]);
 

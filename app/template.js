@@ -1,9 +1,13 @@
 /* globals escape: false */
-define(['app', 'keymaster', 'ngCookies'], function(app, key) {
+define(['app', 'keymaster'], function(app, key) {
 
-	app.controller("PrintSmartCtrl", ["$scope", "$location", "$timeout", "$document", "$cookies", function ($scope, $location, $timeout, $document, $cookies) {
+	app.controller("PrintSmartCtrl", ["$scope", "$location", "$timeout", "$document", "$route", 
+	                         function ($scope,   $location,   $timeout,   $document,   $route) {
 
-		$scope.location = Captialize($cookies.get('location'));
+		$scope.capitalize = captialize;
+		$scope.location = function() {
+			return $route.current && $route.current.params.location;
+		}
 
 		$scope.$watch(function() { return $location.path(); }, function(path){
 
@@ -21,7 +25,12 @@ define(['app', 'keymaster', 'ngCookies'], function(app, key) {
 
 				var badge = $scope.badge=='boxes' ? "boxes" : (($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID");
 
-				$location.path('/badge/'+escape(badge));
+				var baseUrl = '';
+				
+				if($scope.location())
+					locationUrl = '/'+encodeURIComponent($scope.location())
+				
+				$location.path(locationUrl+'/badge/'+escape(badge));
 			}
 
 			$scope.badge = "";
@@ -30,7 +39,7 @@ define(['app', 'keymaster', 'ngCookies'], function(app, key) {
 		$scope.close = close;
 
 		$scope.isHome = function () {
-			return $location.path() == "/";
+			return $route.current && $route.current.$$route.canScan;
 		};
 
 		$scope.formatBadge = function (code) {
@@ -48,17 +57,16 @@ define(['app', 'keymaster', 'ngCookies'], function(app, key) {
 			keepBadgeFocus();
 
         function close() {
-            $location.url("/");
+			$location.url("/"+encodeURIComponent($scope.location()||''));
         };
 
-	}]);
+		function captialize(text) {
 
-	function Captialize(text) {
-
-		if(text) {
-			text = text.replace(/\b\w/g, function(l){ return l.toUpperCase() });
+			if(text) {
+				text = text.replace(/\b\w/g, function(l){ return l.toUpperCase() });
+			}
+	
+			return text;
 		}
-
-		return text;
-	}
+	}]);
 });

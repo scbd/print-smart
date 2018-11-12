@@ -9,7 +9,7 @@
 
 	<link rel="stylesheet" type="text/css" href="app/libs/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="app/libs/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="https://raw.githack.com/daneden/animate.css/master/animate.css">
+	<!-- <link rel="stylesheet" type="text/css" href="https://raw.githack.com/daneden/animate.css/master/animate.css"> -->
 
 	<style>[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
 	<style type="text/css">
@@ -62,7 +62,7 @@
 						</td>
 						<td>
 							<h1>SCBD PrintSmart 
-								<small ng-if="::location"><br/><span class="label label-default">{{::location}}</span></small>
+								<small ng-if="location()"><br/><span class="label label-default">{{::capitalize(location())}}</span></small>
 							</h1>
 						</td>
 					</tr>
