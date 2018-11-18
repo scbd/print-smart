@@ -8,7 +8,7 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 		$scope.location  = location;
 		$scope.toCommit  = toCommit;
 		$scope.commit    = commit;
-		$scope.captialize= captialize;
+		$scope.capitalize= capitalize;
 		$scope.flag      = flag;
 		$scope.badge     = null;
 		$scope.languages = {
@@ -286,7 +286,7 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 				  !$scope.isBadgeInvalid();
 		};
 
-		function captialize(text) {
+		function capitalize(text) {
 
 			if(text) {
 				text = text.replace(/\b\w/g, function(l){ return l.toUpperCase() });

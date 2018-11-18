@@ -4,7 +4,7 @@ define(['app', 'keymaster'], function(app, key) {
 	app.controller("PrintSmartCtrl", ["$scope", "$location", "$timeout", "$document", "$route", 
 	                         function ($scope,   $location,   $timeout,   $document,   $route) {
 
-		$scope.capitalize = captialize;
+		$scope.capitalize = capitalize;
 		$scope.location = function() {
 			return $route.current && $route.current.params.location;
 		}
@@ -60,7 +60,7 @@ define(['app', 'keymaster'], function(app, key) {
 			$location.url("/"+encodeURIComponent($scope.location()||''));
         };
 
-		function captialize(text) {
+		function capitalize(text) {
 
 			if(text) {
 				text = text.replace(/\b\w/g, function(l){ return l.toUpperCase() });
