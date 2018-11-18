@@ -5,6 +5,10 @@
         <div class="col-md-12">
             <form class="form-horizontal">
                 <div class="form-group">
+                    <label for="prefix">Prefix</label>
+                    <input id="prefix" type="text" class="form-control" placeholder="ex: C-" ng-model="prefix">
+                </div>
+                <div class="form-group">
                     <label for="startIndex">Start index</label>
                     <input id="startIndex" type="number" class="form-control" placeholder="ex: 1000" ng-model="startIndex">
                 </div>
@@ -13,13 +17,22 @@
                     <input id="stopIndex" type="number" class="form-control" placeholder="ex: 1999" ng-model="stopIndex">
                 </div>
                 <div class="form-group">
+                    <label for="codeLength">Code Length</label>
+                    <input id="codeLength" type="number" class="form-control" placeholder="ex: 4" ng-model="codeLength">
+                </div>                
+                <div class="form-group">
                     <label for="priority">Priority - <i>0 = high;  100 = medium;   1000 = low; ....</i></label>
                     <input id="priority" type="number" class="form-control" placeholder="default: 0" ng-model="priority">
                 </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input id="location" type="text" class="form-control" placeholder="ex: capital" ng-model="location">
+                </div>                
             </form>
         </div>
 
-        <pre>{{boxes|json}}</pre>
+        <button class="btn btn-default" data-clipboard-target="#box-data">Copy to clipboard</button>
+        <pre id="box-data">{{boxes|json}}</pre>
 
         <h2>Country boxes</h2>
 

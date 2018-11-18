@@ -1,5 +1,10 @@
-define(['lodash', 'libs/diacritic/diacritics', 'angular'], function(_, diacritics) {
+define(['lodash', 'libs/diacritic/diacritics', 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js', 'angular'], 
+        function(_, diacritics, ClipboardJS) {
 	return ["$scope", "$http", function ($scope, $http) {
+
+        new ClipboardJS('button');
+
+        $scope.location=""
 
         $http.get("/api/v2015/countries").then(function(res){
 
@@ -27,7 +32,7 @@ define(['lodash', 'libs/diacritic/diacritics', 'angular'], function(_, diacritic
         //
         //
         //==============================
-        $scope.$watch("startIndex+stopIndex+priority", function(){
+        $scope.$watch("startIndex+stopIndex+priority+codeLength+prefix+location", function(){
 
             if($scope.startIndex<=0 && $scope.stopIndex<=0) {
                 delete $scope.boxes;
@@ -36,12 +41,17 @@ define(['lodash', 'libs/diacritic/diacritics', 'angular'], function(_, diacritic
 
             $scope.boxes = [];
 
+            var prefix     = $scope.prefix||'';
+            var codeLength = Math.min(Math.max($scope.codeLength||4,0),10);
+            var location   = $scope.location || undefined;
+
             for(var index=$scope.startIndex; index<=$scope.stopIndex; index++)
             {
                 $scope.boxes.push({
-                    code : pad(index),
+                    code : prefix+pad(index, codeLength),
                     assignment : null,
                     priority : $scope.priority || 0,
+                    location : location,
                     items : [ ]
                 });
             }
@@ -51,14 +61,12 @@ define(['lodash', 'libs/diacritic/diacritics', 'angular'], function(_, diacritic
         //
         //
         //==============================
-        function pad(v) {
+        function pad(v, len) {
 
             v = v.toString();
 
-            if(v.length<4) v = "0"+v;
-            if(v.length<4) v = "0"+v;
-            if(v.length<4) v = "0"+v;
-            if(v.length<4) v = "0"+v;
+            while(v.length < len)
+                v = "0"+v;
 
             return v;
         }
