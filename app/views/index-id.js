@@ -3,7 +3,7 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
-		var location = $route.current.params.location;
+		var location = $route.current.params.location || '';
 
 		$scope.location  = location;
 		$scope.toCommit  = toCommit;
@@ -67,7 +67,7 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 					location: location
 				};
 
-				if(q.location) 
+				if(!q.location) 
 					delete q.location;
 
 				qRequests = $http.get('/api/v2014/printsmart-requests', { params : { q : q } });
@@ -103,7 +103,7 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 				if($scope.$root.contact) { // flag ready for clear
 
 					_.each(requests, function(r){
-						if(r.printedOn && r.participant == $scope.$root.contact.ContactID)
+						if(r.printedOn && r.participant == $scope.$root.contact.ContactID && r.location == location)
 							flag(r, true);
 					});
 				}
@@ -114,22 +114,28 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 
 
 				var boxes = _.map(qBoxGroup, function(requests) {
+					var request = _.first(requests)
 					return {
-						box : _.first(requests).box,
-						participant : _.first(requests).participant,
-                        participantName : _.first(requests).participantName,
-						participantInitials : initials(_.first(requests).participantName),
-						requests : requests
+						box:      request.box,
+						location: request.location||'',
+						enabled: (request.location||'') == location,
+						participant:     request.participant,
+                        participantName: request.participantName,
+						participantInitials: initials(request.participantName),
+						requests: requests
+						
 					};
 				});
 
 				$scope.allRequests = requests;
 				$scope.boxes       = _.sortBy(boxes, function(b){
 
-					if($scope.$root.contact && $scope.$root.contact.ContactID == b.participant)
-						return ""; // Put current user at first
+					var prefix = (b.location==location) ? 'A_' : 'Z_';
 
-					return b.box+b.participantName;
+					if($scope.$root.contact && $scope.$root.contact.ContactID == b.participant)
+						prefix = '0_' + prefix; // Put current user at first
+
+					return prefix+b.box+b.participantName;
 				});
 
 				$scope.loading = false;
@@ -144,9 +150,9 @@ define(['lodash', 'angular', 'moment', 'keymaster', 'app', 'directives/checkbox'
 			});
 		}
 
-        $scope.selectAll = function(box) {
+        $scope.selectAll = function(box, select) {
             box.requests.forEach(function(r){
-                $scope.flag(r, box.allSelected);
+                $scope.flag(r, select);
             });
         };
 

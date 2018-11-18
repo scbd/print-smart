@@ -1,5 +1,10 @@
 <div>
-	<style> .delivered {text-decoration:line-through;} </style>
+	<style> 
+	.delivered {text-decoration:line-through;} 
+	@media (max-width: 767px) {
+		h3.name { font-size: 14px }
+	}
+	</style>
 		<div class="row" ng-show="loading">
 			<div class="col-md-12">
 				<h3><i class="fa fa-cog fa-spin"></i> Loading....</h3>
@@ -11,40 +16,46 @@
 
 				<h3 ng-hide="allRequests.length">No document</h3>
 
-				<div ng-repeat="box in boxes" >
-
+				<div ng-repeat="box in boxes" ng-style="{ opacity: box.location == location ? '1.0' : '0.60' }" >
 
 					<button class="hidden-xs btn btn-primary pull-right" ng-disabled="(box.requests|filter:toCommit).length==0" ng-click="commit((box.requests|filter:toCommit), boxes.length==1)">Clear {{(box.requests|filter:toCommit).length}} document(s) »</button>
 					<button class="visible-xs btn btn-primary btn-xs pull-right" ng-disabled="(box.requests|filter:toCommit).length==0" ng-click="commit((box.requests|filter:toCommit), boxes.length==1)">Clear {{(box.requests|filter:toCommit).length}} document(s) »</button>
-					<h3 class="hidden-xs">{{box.box}} - {{box.participantInitials}} | {{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}</h3>
-					<h5 class="visible-xs">{{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}</h5>
+					<h3 class="name">
+						<b>{{box.box}}</b> -
+						<span class="hidden-xs">
+							{{box.participantInitials}} | 
+						</span>
+						{{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}
+
+					</h3>
 
 					<table width="100%" style="margin:20px 10px" class="table">
 						<tr>
 							<th style="vertical-align:middle;width:26px">
-                                <checkbox style="font-size:24px;color:inherit" ng-model="box.allSelected" ng-change="selectAll(box)"></checkbox>
+                                <checkbox style="font-size:24px;color:inherit" ng-model="box.allSelected" ng-change="selectAll(box, box.allSelected)"  ng-show="box.enabled && !request.loading"></checkbox>
                             </th>
 							<th style="vertical-align:middle;width:26px">#</th>
 							<th style="vertical-align:middle">Document</th>
 							<th style="vertical-align:middle" class="hidden-xs">Language</th>
-							<th style="vertical-align:middle" ng-if="::location">Location</th>
 							<th style="vertical-align:middle" class="hidden-xs">Requested</th>
 							<th style="vertical-align:middle">Printed</th>
-							<th style="vertical-align:middle;font-size:200%" class="hidden-xs text-right"><span class="label label-info">&nbsp;{{box.box}}&nbsp;</span></td>
-							<th style="vertical-align:middle;"               class="visible-xs text-right"><span class="label label-info">&nbsp;{{box.box}}&nbsp;</span></td>
+							<th style="vertical-align:middle;font-size:175%" class="hidden-xs text-right">
+								<span class="label" ng-class="{ 'label-danger' : box.location!=location, 'label-success' : box.location==location }">
+										{{::capitalize(box.location)}}</span>							
+								<span class="label label-info">&nbsp;{{box.box}}&nbsp;</span>
+							</th>
 						</tr>
 
 						<tr ng-repeat="request in box.requests|orderBy:'documentSymbol'" ng-class="{ info: request.completed && !request.deliveredOn, delivered : request.deliveredOn, danger : (request.status['job-state']=='aborted' || request.status['job-state']=='canceled'), warning : (request.status['job-state']=='pending-held'||request.status['job-state']=='processing-stopped'), }" style="height:40px">
-							<td class="text-left">
+							<td style="vertical-align:middle" class="text-left">
 								<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
-                                <checkbox style="font-size:24px;text-decoration:inherit" ng-model="request.completed" ng-disabled="request.deliveredOn" ng-hide="request.loading"></checkbox>
+                                <checkbox style="font-size:24px;text-decoration:inherit" ng-model="request.completed" ng-disabled="request.deliveredOn" ng-show="box.enabled && !request.loading"></checkbox>
 							</td>
-							<td class="text-right">{{$index+1}}.</td>
-							<td>{{displayText(request)||request.documentSymbol}}</td>
-							<td class="hidden-xs">{{languages[request.documentLanguage]}}</td>
-							<th style="vertical-align:middle" ng-if="::location">{{::captialize(request.location)}}</th>
-							<td class="hidden-xs">{{timeAgo(fixDate(request.createdOn))}}</td>
-							<td colspan="2">
+							<td style="vertical-align:middle" class="text-right">{{$index+1}}.</td>
+							<td style="vertical-align:middle">{{displayText(request)||request.documentSymbol}}</td>
+							<td style="vertical-align:middle" class="hidden-xs">{{languages[request.documentLanguage]}}</td>
+							<td style="vertical-align:middle" class="hidden-xs">{{timeAgo(fixDate(request.createdOn))}}</td>
+							<td style="vertical-align:middle" colspan="2">
 								<span ng-switch="request.status['job-state'] || 'pending' ">
 									<span class="label label-default" ng-switch-when="pending">Document is not printed yet!</span>
 									<span class="label label-default" ng-switch-when="processing">Document is not printed yet!</span>
