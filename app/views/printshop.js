@@ -1,5 +1,7 @@
 define(['lodash', 'app'], function(_) {
-	return ["$scope", "$cookies", "$http", function ($scope, $cookies, $http) {
+	return ["$scope", "$cookies", "$http", "$route", function ($scope, $cookies, $http, $route) {
+
+		var location = $route.current.params.location || '';
 
 		$scope.printShopEnabled = !!$cookies.get("machineAuthorization");
 
@@ -86,7 +88,8 @@ define(['lodash', 'app'], function(_) {
 			}).then(function(){
 
 				var postData = {
-					badge : badge
+					badge : badge,
+					location: location
 				};
 
 				postData.documents = _(documents).map(function(d) {
