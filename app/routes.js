@@ -20,6 +20,7 @@ define(['app','lodash', 'providers/extended-route','authentication'], function(a
         .when('/:location',                  {templateUrl: 'views/index.html',                resolveController: true, canScan:true })
         .when('/:location/badge/:badge',     {templateUrl: 'views/index-id.html',             resolveController: true })
         .when('/:location/management/boxes', {templateUrl: 'views/management/boxes.html',     resolveController: true })        
+        .when('/:location/printshop',        {templateUrl: 'views/printshop.html',            resolveController: true })
 
 
         .otherwise({redirectTo: '/not-found'});
