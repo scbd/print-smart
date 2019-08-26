@@ -6,7 +6,7 @@ define(['app','lodash', 'providers/extended-route','authentication'], function(a
       $locationProvider.hashPrefix('!');
 
       $routeProvider
-        .when('/',                  {templateUrl: 'views/index.html',         resolveController: true })
+        .when('/',                  {templateUrl: 'views/index.html',         resolveController: true, canScan:true })
         .when('/management/boxes',  {templateUrl: 'views/management/boxes.html',     resolveController: true })
         .when('/statistics',        {templateUrl: 'views/stats.html',         resolveController: true, resolve : { user : securize(["Administrator"]) } })
         .when('/printshop',         {templateUrl: 'views/printshop.html',     resolveController: true })

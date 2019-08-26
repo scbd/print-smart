@@ -40,7 +40,7 @@
 							<th style="vertical-align:middle" class="hidden-xs">Requested</th>
 							<th style="vertical-align:middle">Printed</th>
 							<th style="vertical-align:middle;font-size:175%" class="hidden-xs text-right">
-								<span class="label" ng-class="{ 'label-danger' : box.location!=location, 'label-success' : box.location==location }">
+								<span ng-if="box.location || location" class="label" ng-class="{ 'label-danger' : box.location!=location, 'label-success' : box.location==location }">
 										{{::capitalize(box.location)}}</span>							
 								<span class="label label-info">&nbsp;{{box.box}}&nbsp;</span>
 							</th>

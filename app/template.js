@@ -25,9 +25,9 @@ define(['app', 'keymaster'], function(app, key) {
 
 				var badge = $scope.badge=='boxes' ? "boxes" : (($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID");
 
-				var baseUrl = '';
+				var locationUrl = '';
 				
-				if($scope.location())
+				if(!canScan() && $scope.location())
 					locationUrl = '/'+encodeURIComponent($scope.location())
 				
 				$location.path(locationUrl+'/badge/'+escape(badge));
@@ -39,7 +39,7 @@ define(['app', 'keymaster'], function(app, key) {
 		$scope.close = close;
 
 		$scope.isHome = function () {
-			return $route.current && $route.current.$$route.canScan;
+			return canScan();
 		};
 
 		$scope.formatBadge = function (code) {
@@ -67,6 +67,10 @@ define(['app', 'keymaster'], function(app, key) {
 			}
 	
 			return text;
+		}
+
+		function canScan()  {
+			return $route.current && $route.current.$$route.canScan;
 		}
 	}]);
 });
